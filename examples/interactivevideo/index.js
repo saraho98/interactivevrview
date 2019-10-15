@@ -622,13 +622,19 @@ function getPossibleOrientationsWithTimes(){
 
     });
 
-    document.getElementById('print-time').innerHTML = sts.currentTime;
+    //round to two decimal spaces
+    var cTime = sts.currentTime.toFixed(2);
+    document.getElementById('print-time').innerHTML = cTime;
 
     if (s != res[0].start){
       // console.log(":)");
     //  alert(res[0].orientations + " :)");
       s = res[0].start;
+
+      //round to two decimal spaces
+      // var ori = (res[0].orientations).toFixed(2);
       document.getElementById('print-main-orientation').innerHTML = res[0].orientations;
+      //document.getElementById('print-main-orientation').innerHTML = ori;
       // i++;
     }
 
