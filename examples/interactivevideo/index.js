@@ -631,11 +631,20 @@ function getPossibleOrientationsWithTimes(){
     //  alert(res[0].orientations + " :)");
       s = res[0].start;
 
+      // document.getElementById('print-main-orientation').innerHTML = res[0].orientations;
+
       //round to two decimal spaces
       // var ori = (res[0].orientations).toFixed(2);
-      document.getElementById('print-main-orientation').innerHTML = res[0].orientations;
-      //document.getElementById('print-main-orientation').innerHTML = ori;
+      // document.getElementById('print-main-orientation').innerHTML = ori;
       // i++;
+
+      // res[0].orientations is an array
+      //if (res[0].orientations.includes(",") == "true"){
+      var ori = "";
+      for (var i = 0; i < res[0].orientations.length; i++){
+        ori = ori + res[0].orientations[i].toFixed(2) + " ";
+      }
+      document.getElementById('print-main-orientation').innerHTML = ori;
     }
 
 
