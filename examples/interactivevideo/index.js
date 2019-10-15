@@ -20,7 +20,7 @@ var FRAME_INCREMENT = 0.01;
 var circle_high = Math.PI + Math.PI/2;
 var circle_low = - Math.PI/2;
 
-// Names have changed: 
+// Names have changed:
 // forced cuts == viewpoint-oriented cuts
 // regular cuts == fixed-orientation cuts
 // optional cuts == active reorientation
@@ -119,7 +119,7 @@ function saveInteractions(){
 
 function recordInteraction(interaction, value) {
   sts.recording_interactions.push({
-    "time": getTimestamp(), 
+    "time": getTimestamp(),
     "interaction": interaction,
     "videoTime": sts.currentTime,
     "value": value
@@ -138,7 +138,7 @@ function seek(t){
 function isMobile() {
   if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
     return true;
-  } 
+  }
   return false;
 }
 
@@ -181,7 +181,7 @@ function outputNewSpec() {
 
     var els = sc_text_arr[i].split(" ");
 
-    var start = undefined; 
+    var start = undefined;
     var orientations = [];
     var text = undefined;
 
@@ -306,7 +306,7 @@ function setupTimeline(video_fn) {
   $(durationVideoPlayer).html('<video src=' + video_fn + ' preload="metadata"></video>');
   $(durationVideoPlayer).find("video").eq(0).on("durationchange", function(){
     var seconds = $(this)[0].duration;
-    sts.specs.duration = seconds; 
+    sts.specs.duration = seconds;
     console.log("Video duration: " + seconds);
 
     // now setup the timeline with this duration
@@ -316,7 +316,7 @@ function setupTimeline(video_fn) {
       slide: onSliderChange
     });
 
-    // if the cell phone is mobile, we're going to have to change the 
+    // if the cell phone is mobile, we're going to have to change the
     if (sts.specs.isMobile) {
       $(timelineSlider).css({"width": "80%", "margin-left": "10%"});
     }
@@ -347,6 +347,13 @@ function hideOptionalButtons(){
   }
 }
 
+function displayMessage (evt) {
+  var message = "I got " + evt.data + " from " + evt.origin;
+
+  console.log(message);
+  //document.getElementById("received-message").innerHTML = message;
+}
+
 function addButtons() {
   // define buttons and add event listeners
   playButton = document.querySelector('#toggleplay');
@@ -366,6 +373,7 @@ function addButtons() {
   orientationButton.addEventListener('click', onToggleOrientation);
   regularcutsButton.addEventListener('click', onToggleRegularCuts);
   forcedcutsButton.addEventListener('click', onToggleForcedCuts);
+  window.addEventListener("message", displayMessage, false);
 }
 
 function createPlayer(video_fn, stereo) {
@@ -392,12 +400,12 @@ function getQueryVariable(variable) {
       var var_out = pair.slice(1,pair.length).join("=");
       return var_out;
     }
-  } 
+  }
   return null;
 }
 
 function parseURL(url) {
-  var known_variables = ["f", "backgroundVideo", "opts", 
+  var known_variables = ["f", "backgroundVideo", "opts",
     "stereo", "nobuttons", "study", "sessionID", "times",
     "participantID", "study_json", "study_i"];
   console.log(known_variables);
@@ -417,7 +425,7 @@ function toggleURLOpts(opt_str){
     if (opt_str.indexOf(k) > -1) {
       // toggle on if it appears
       url_opts[k]();
-    } 
+    }
   };
 }
 
@@ -426,7 +434,7 @@ function createStudyOutFilename(camera_or_interactions){
     var base = sts.specs.fn.split("/")[sts.specs.fn.split("/").length-1];
     base = base.split(".")[0];
     var ext = [base, sts.specs.opts, sts.specs.study_i,
-        sts.specs.sessionID, sts.specs.participantID, 
+        sts.specs.sessionID, sts.specs.participantID,
         randomId(), camera_or_interactions];
     ext = ext.filter(function(d){return d !== undefined}); // don't want the null values
     var ext_str = ext.join("_");
@@ -490,7 +498,7 @@ function onLoad() {
   sts.specs.stereo = (q.stereo == "true");
   sts.specs.nobuttons = (q.nobuttons == "true");
   // TODO: get rid of sessionID - its just here to work with old links
-  sts.specs.sessionID = q.sessionID; 
+  sts.specs.sessionID = q.sessionID;
 
   // study specs
   sts.specs.study = (q.study == "true");
@@ -527,17 +535,17 @@ function onLoad() {
 
           if (next_study_i < participant_json.length) {
             sts.specs.next_study_url = participant_json[next_study_i];
-          } 
+          }
           fillOutStudyInfo();
       });
     }
-  } 
+  }
 
   if (url.indexOf("demo.html") > -1) {
     sts.specs.demo = true;
     sts.specs.nobuttons = true;
     $('#technique-title').text(sts.map_condition[sts.specs.opts]);
-    if (sts.specs.opts.indexOf("optionalcuts") >  -1 
+    if (sts.specs.opts.indexOf("optionalcuts") >  -1
         || sts.specs.opts.indexOf("hybridcuts") >  -1) {
       sts.specs.orientationbutton = true;
     }
@@ -581,12 +589,12 @@ function onLoad() {
         if (sts.specs.opts) {
           toggleURLOpts(sts.specs.opts);
         }
-      
+
         // we can get rid of currentTime because that ugly
         $('#currentTime').hide();
       }
     });
-  } else if (sts.specs.fn 
+  } else if (sts.specs.fn
              && sts.specs.fn.split(".")[1].length === 3) {
           // && sts.specs.fn.toLowerCase().indexOf(".mp4") > -1) {
 
@@ -600,15 +608,33 @@ function onLoad() {
   }
 }
 
+
+var s = -1; // start
+// var i = 0;
 function getPossibleOrientationsWithTimes(){
 
   if (sts.specs.playback !== null) {
     // get relevant orientation objects
     var res = $(sts.specs.playback.orientation).filter(function(){
-      return this.start <= sts.currentTime 
+      // console.log(sts.currentTime);
+      return this.start <= sts.currentTime
           && this.end > sts.currentTime;
+
     });
 
+    document.getElementById('print-time').innerHTML = sts.currentTime;
+
+    if (s != res[0].start){
+      // console.log(":)");
+    //  alert(res[0].orientations + " :)");
+      s = res[0].start;
+      document.getElementById('print-main-orientation').innerHTML = res[0].orientations;
+      // i++;
+    }
+
+
+    vrView.getOrientation();
+    // else if ()
     // for each relevant orientation object, append possible orientations
     var all_orientations = [];
     var all_times = [];
@@ -619,7 +645,7 @@ function getPossibleOrientationsWithTimes(){
       };
     };
     return {times: all_times, orientations: all_orientations};
-  }  
+  }
 
 }
 
@@ -631,37 +657,40 @@ function updateOrientation(){
     var orientations = res.orientations;
     var times = res.times;
 
-    // if there are any possible orientations, we're just going 
+    // if there are any possible orientations, we're just going
     // to take the first one and trigger a cut
     if (orientations !== null && times && times.length > 0
-      && (orientations[0] !== sts.current_orientation 
+      && (orientations[0] !== sts.current_orientation
         || times[0].toString() !== sts.current_orientation_time )) {
-
+          //console.log(orientations[0] + " orientations[0]");
       var first_orientation = orientations[0];
       if (sts.cuts.regular_cuts && !sts.cuts.all_regular_cuts_stopped) {
         // orient important to consistant direction
         if (sts.current_orientation === undefined || sts.current_orientation === null) {
           sts.current_orientation = 0;
+          //document.getElementById('print-current-orientation').innerHTML = sts.current_orientation;
         }
         var regular_cut_orientation = first_orientation + (sts.theta.current - sts.current_orientation);
         if (sts.specs.isMobile) {
           regular_cut_orientation = first_orientation - (sts.theta.current - sts.current_orientation);
         }
-
-        vrView.setOrientation(regular_cut_orientation); 
+        //console.log(sts.current_orientation + "sts current orientation");
+        vrView.setOrientation(regular_cut_orientation);
         recordInteraction("regularCut", regular_cut_orientation);
 
       } else if (sts.cuts.regular_cuts && sts.cuts.all_regular_cuts_stopped) {
         recordInteraction("noCutPerformed");
       } else {
         // normal, orient important to viewer
-        vrView.setOrientation(first_orientation); 
+        vrView.setOrientation(first_orientation);
         console.log("setOrientation: " + first_orientation);
         recordInteraction("forcedCut", first_orientation);
       }
       sts.current_orientation = first_orientation;
       sts.current_orientation_time = times[0].toString();
-    } 
+      //document.getElementById('print-current-orientation').innerHTML = sts.current_orientation;
+      //console.log(first_orientation);
+    }
 }
 
 // update the options for the video player
@@ -703,13 +732,13 @@ function stopPlayingVideoIfNeeded(){
       && !sts.playthrough) {
       stopPlaying = true;
 
-    } else if (sts.currentTime >= sts.specs.duration - .5 
+    } else if (sts.currentTime >= sts.specs.duration - .5
          && sts.specs.study && !sts.playthrough) {
       stopPlaying = true;
     }
 
     if (stopPlaying) {
-      console.log("Automatically stopped at: " + sts.currentTime); 
+      console.log("Automatically stopped at: " + sts.currentTime);
       onTogglePlay();
       vrView.record(createStudyOutFilename("camera"));
       recordInteraction("stoppedPlayAutomatically");
@@ -728,7 +757,7 @@ function listenForCurrentTime() {
 
     // if time has updated and its not the background video
     if (last_current_time !== e.detail
-      && (!sts.specs.background_video_fn 
+      && (!sts.specs.background_video_fn
        || sts.specs.background_video_fn !== sts.specs.current_video_fn)) {
 
       // console.log(sts.currentTime + ", "  + sts.theta.current + ", " + sts.specs.current_video_fn);
@@ -737,7 +766,7 @@ function listenForCurrentTime() {
       if (sts.timeline) {
         updateTimeline();
         $('#currentTime').text(sts.currentTime);
-      } 
+      }
       if (sts.specs.playback && sts.specs.playback.shots) {
         updateShot();
       }
@@ -749,12 +778,12 @@ function listenForCurrentTime() {
 
   // this could be useful
   iframe.addEventListener("getorientationanswer" , function(e) {
-    
+
     var new_theta = e.detail +  sts.setOrientationOffset;
 
     if (new_theta !== sts.theta.current) {
 
-      // we only want to update last theta/time changed if the 
+      // we only want to update last theta/time changed if the
       // theta looks like its more than noise
       if (Math.abs(new_theta - sts.theta.current) > sts.theta.rec_change) {
         sts.theta.last = sts.theta.current;
@@ -763,7 +792,7 @@ function listenForCurrentTime() {
       }
       // we'll update the new theta no matter what
       sts.theta.current = new_theta;
-      
+
       sts.current_theta_dirty = true;
       // filterBasedOnOrientationInteractions();
     }
@@ -772,7 +801,7 @@ function listenForCurrentTime() {
   // but also we need to ask for it all of the time :(
   setInterval(function() {
     vrView.currentTime();
-    vrView.getOrientation(); 
+    vrView.getOrientation();
   }, 1000/29);
 }
 
@@ -796,7 +825,7 @@ function isTouchCardboardButton(e) {
 }
 
 function onCardboardButtonPress() {
-  // if (sts.specs.study 
+  // if (sts.specs.study
   //     && vrView.isPaused) {
   if (vrView.isPaused) {
     onTogglePlay();
@@ -816,7 +845,7 @@ function onVRViewReady() {
   playButton.classList.add('paused');
   vrView.isPaused = true;
   console.log('vrView.isPaused', vrView.isPaused);
-  
+
   // Set the initial state of the buttons.
   if (vrView.isPaused) {
     playButton.classList.add('paused');
@@ -860,7 +889,7 @@ function onToggleOrientation() {
 
     // set orientation to the next orientation
     var new_i = parseInt(sts.specs.next_orientation_i);
-    vrView.setOrientation(orientations[new_i]); 
+    vrView.setOrientation(orientations[new_i]);
     recordInteraction("onToggleOrientation", orientations[new_i]);
 
     // figure out the next orientation_i;
@@ -919,7 +948,7 @@ function onToggleForcedCuts() {
 }
 
 function onToggleRegularCuts() {
-  if (!sts.cuts.regular_cuts) { 
+  if (!sts.cuts.regular_cuts) {
     sts.cuts.regular_cuts = true;
     sts.specs.mode = "regular_cuts";
     $(regularcutsButton).text("Turn off regular cuts");
@@ -937,6 +966,9 @@ function onToggleRegularCuts() {
 function onToggleHybridCuts() {
   onToggleForcedCuts();
   $(orientationButton).removeClass("disabled");
+}
+
+function printTimestamp() {
 }
 
 window.addEventListener('load', onLoad);

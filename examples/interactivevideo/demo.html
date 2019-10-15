@@ -14,7 +14,7 @@
       integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script> 
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
     <!-- This library ^ lets you use jquery slider UI with mobile, but neither work well -->
 
     <style type="text/css">
@@ -48,7 +48,7 @@
           <button class="btn btn-default" id="toggleorientation">Switch viewpoint</button>
         </div>
       </div>
-      
+
 
       <div class="row">
         <div class="col-md-1 col-md-offset-2">
@@ -89,8 +89,21 @@
         </div>
       </div>
 
+      <div class=row id="my-code">
+        <h4>Timestamp</h4>
+        <h4 id="print-time"></p><br>
+
+        <h4>Current Orientation</h4>
+        <h4 id="print-current-orientation"></h4><br>
+
+        <h4>Main Orientation</h4>
+        <h4 id="print-main-orientation"></h4></br>
+
+      </div>
+
+
       <div id="demo-instructions">
-        
+
         <div class="row" id="desktop-instructions">
           <div class="col-sm-8">
             <h4>Desktop/laptop instructions</h4>
@@ -118,7 +131,7 @@
         <div class="row" id="cardboard-instructions">
           <div class="col-sm-8">
             <h4>Mobile w/ cardboard instructions</h4>
-            First, open this page on your mobile phone and then click the cardboard button in the bottom right hand corner of the video player. Put the phone in the cardboard player. 
+            First, open this page on your mobile phone and then click the cardboard button in the bottom right hand corner of the video player. Put the phone in the cardboard player.
             <ul>
               <li><b>Play</b>: Press the cardboard button</li>
               <li><b>Rotate scene</b>: Change the orientation of the cardboard player.</li>
