@@ -348,7 +348,7 @@ function hideOptionalButtons(){
 }
 
 function displayMessage (evt) {
-  var message = "I got " + evt.data + " from " + evt.origin;
+  var message = "I got " + vrView.getOrientation() + " from " + evt.origin;
 
   console.log(message);
   //document.getElementById("received-message").innerHTML = message;
@@ -373,7 +373,7 @@ function addButtons() {
   orientationButton.addEventListener('click', onToggleOrientation);
   regularcutsButton.addEventListener('click', onToggleRegularCuts);
   forcedcutsButton.addEventListener('click', onToggleForcedCuts);
-  window.addEventListener("message", displayMessage, false);
+  window.addEventListener("message", displayMessage);
 }
 
 function createPlayer(video_fn, stereo) {
@@ -648,7 +648,9 @@ function getPossibleOrientationsWithTimes(){
     }
 
 
-    vrView.getOrientation();
+    // vrView.getOrientation();
+    // console.log("orientations get " + vrView.getOrientation());
+
     // else if ()
     // for each relevant orientation object, append possible orientations
     var all_orientations = [];
