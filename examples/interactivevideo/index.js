@@ -347,12 +347,16 @@ function hideOptionalButtons(){
   }
 }
 
-function displayMessage (evt) {
-  var message = "I got " + vrView.getOrientation() + " from " + evt.origin;
-
-  console.log(message);
+// <iframe src='build/vrview.js' id="iframe_id"></iframe>
+// function displayMessage (evt) {
+  // var message = "I got " + vrView.Message.GET_ORIENTATION + " from " + evt.origin;
+  // var message = "I got " + vrView.getOrientation() + " from " + evt.origin; - returns undefined
+  // I was looking at vrview.js line 495
+  // started looking into embed.js
+  // var message = "I got " + vrView.getOrientation() + " from " + evt.origin;
+  // console.log(message);
   //document.getElementById("received-message").innerHTML = message;
-}
+// }
 
 function addButtons() {
   // define buttons and add event listeners
@@ -373,7 +377,7 @@ function addButtons() {
   orientationButton.addEventListener('click', onToggleOrientation);
   regularcutsButton.addEventListener('click', onToggleRegularCuts);
   forcedcutsButton.addEventListener('click', onToggleForcedCuts);
-  window.addEventListener("message", displayMessage);
+  //window.addEventListener("message", displayMessage);
 }
 
 function createPlayer(video_fn, stereo) {
@@ -626,6 +630,10 @@ function getPossibleOrientationsWithTimes(){
     var cTime = sts.currentTime.toFixed(2);
     document.getElementById('print-time').innerHTML = cTime;
 
+    //round to two decimal spaces
+    var cOri = sts.theta.current.toFixed(2);
+    document.getElementById('print-current-orientation').innerHTML = cOri;
+
     if (s != res[0].start){
       // console.log(":)");
     //  alert(res[0].orientations + " :)");
@@ -638,8 +646,16 @@ function getPossibleOrientationsWithTimes(){
       // document.getElementById('print-main-orientation').innerHTML = ori;
       // i++;
 
+      //var cOri = document.getElementById('iframe_id').getOrientation();
+      //document.getElementById('print-main-orientation').innerHTML = cOri;
+      // vrView.Message.GET_ORIENTATION;
+
+      //var check = document.getElementById("vrView").contentWindow.Message.GET_ORIENTATION;
+
       // res[0].orientations is an array
+
       //if (res[0].orientations.includes(",") == "true"){
+
       var ori = "";
       for (var i = 0; i < res[0].orientations.length; i++){
         ori = ori + res[0].orientations[i].toFixed(2) + " ";
