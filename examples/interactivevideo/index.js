@@ -630,8 +630,14 @@ function getPossibleOrientationsWithTimes(){
     var cTime = sts.currentTime.toFixed(2);
     document.getElementById('print-time').innerHTML = cTime;
 
+    //convert radians to degrees
+    var cOri = sts.theta.current*180/Math.PI;
+    // if the radian was in negative value make sure to conver it
+    if (cOri < 0){
+      cOri = 360 + cOri;
+    }
     //round to two decimal spaces
-    var cOri = sts.theta.current.toFixed(2);
+    cOri = cOri.toFixed(2);
     document.getElementById('print-current-orientation').innerHTML = cOri;
 
     if (s != res[0].start){
@@ -658,7 +664,13 @@ function getPossibleOrientationsWithTimes(){
 
       var ori = "";
       for (var i = 0; i < res[0].orientations.length; i++){
-        ori = ori + res[0].orientations[i].toFixed(2) + " ";
+        // convert radians to degrees
+        var mOri = res[0].orientations[i]*180/Math.PI;
+        if (mOri < 0){
+          mOri = 360 + mOri;
+        }
+
+        ori = ori + mOri.toFixed(2) + " ";
       }
       document.getElementById('print-main-orientation').innerHTML = ori;
     }
@@ -783,6 +795,10 @@ function stopPlayingVideoIfNeeded(){
 function listenForCurrentTime() {
   // we need to listen for events
   iframe = getIframedocument();
+
+  //when the video is paused
+  //iframe.addEventListener("currenttimeanswer" , function(e){
+  // });
 
   iframe.addEventListener("currenttimeanswer" , function(e){
     // update that current time!
