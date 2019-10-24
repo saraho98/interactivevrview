@@ -615,6 +615,8 @@ function onLoad() {
 
 var s = -1; // start
 // var i = 0;
+
+var closestMOri = 0; // to get the closest orientation
 function getPossibleOrientationsWithTimes(){
 
   if (sts.specs.playback !== null) {
@@ -640,6 +642,51 @@ function getPossibleOrientationsWithTimes(){
     cOri = cOri.toFixed(2);
     document.getElementById('print-current-orientation').innerHTML = cOri;
 
+    // arrow directions
+    // threshold degree 10
+
+    // update main orientation
+    closestMOri = res[0].orientations[0]*180/Math.PI;
+    for (var i = 0; i < res[0].orientations.length; i++){
+      // convert radians to degrees
+      var mOri = res[0].orientations[i]*180/Math.PI;
+      if (mOri < 0){
+        mOri = 360 + mOri;
+      }
+      var diff = Math.min(Math.abs(cOri-mOri), 360 - Math.abs(cOri-mOri));
+      if (diff < Math.abs(cOri-closestMOri)){
+        closestMOri = mOri;
+      }
+    }
+
+    var absOri = Math.abs(cOri-closestMOri);
+    if (absOri > 5){
+      if (absOri <= 180){
+        if ((cOri-closestMOri) > 0){
+          document.getElementById("rarrow").style.visibility="visible";
+          document.getElementById("larrow").style.visibility="hidden";
+        }
+        else {
+          document.getElementById("larrow").style.visibility= "visible";
+          document.getElementById("rarrow").style.visibility= "hidden";
+        }
+      }
+      else {
+        if ((cOri-closestMOri) < 0){
+          document.getElementById("rarrow").style.visibility="visible";
+          document.getElementById("larrow").style.visibility="hidden";
+        }
+        else {
+          document.getElementById("larrow").style.visibility= "visible";
+          document.getElementById("rarrow").style.visibility= "hidden";
+        }
+      }
+    }
+    else {
+      document.getElementById("larrow").style.visibility="hidden";
+      document.getElementById("rarrow").style.visibility= "hidden";
+    }
+
     if (s != res[0].start){
       // console.log(":)");
     //  alert(res[0].orientations + " :)");
@@ -663,11 +710,16 @@ function getPossibleOrientationsWithTimes(){
       //if (res[0].orientations.includes(",") == "true"){
 
       var ori = "";
+      closestMOri = res[0].orientations[0]*180/Math.PI;
       for (var i = 0; i < res[0].orientations.length; i++){
         // convert radians to degrees
         var mOri = res[0].orientations[i]*180/Math.PI;
         if (mOri < 0){
           mOri = 360 + mOri;
+        }
+        var diff = Math.min(Math.abs(cOri-mOri), 360 - Math.abs(cOri-mOri));
+        if (diff < Math.abs(cOri-closestMOri)){
+          closestMOri = mOri;
         }
 
         ori = ori + mOri.toFixed(2) + " ";
