@@ -41,7 +41,7 @@ iframe {
     cursor: pointer;
     opacity: 0.5;
   }
- 
+
   #controls > *:hover {
     opacity: 1;
   }
@@ -90,5 +90,15 @@ iframe {
 
   #controls {
     width: 700px;
+  }
+
+  /* place arrows */
+  #leftarrow {
+    display: inline;
+  }
+  
+  #rightarrow {
+    display: inline;
+    float: right;
   }
 }
