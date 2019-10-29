@@ -639,7 +639,7 @@ function getPossibleOrientationsWithTimes(){
       cOri = 360 + cOri;
     }
     //round to two decimal spaces
-    cOri = cOri.toFixed(2);
+    cOri = cOri.toFixed(0);
     document.getElementById('print-current-orientation').innerHTML = cOri;
 
     // arrow directions
@@ -722,7 +722,7 @@ function getPossibleOrientationsWithTimes(){
           closestMOri = mOri;
         }
 
-        ori = ori + mOri.toFixed(2) + " ";
+        ori = ori + mOri.toFixed(0) + " ";
       }
       document.getElementById('print-main-orientation').innerHTML = ori;
     }
