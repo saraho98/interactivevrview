@@ -81,6 +81,8 @@ sts = {
 
 function getTimestamp(){
   var d = new Date();
+  // console.log("does this hm");
+  getPossibleOrientationsWithTimes();
   return d.getTime();
 }
 
